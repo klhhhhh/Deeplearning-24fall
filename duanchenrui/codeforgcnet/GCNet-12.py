@@ -133,13 +133,10 @@ class ResidualBlock(nn.Module):
         super(ResidualBlock, self).__init__()
         self.channel = in_channel
         self.res1 = nn.Sequential(
-            nn.Conv2d(in_channel, out_channel, kernel_size=1, stride=stride),  # 保持尺寸不变
+            nn.Conv2d(in_channel, out_channel, kernel_size=3, stride=stride, padding=1),  # 保持尺寸不变
             nn.BatchNorm2d(out_channel),
             nn.ReLU(inplace=True),
-            nn.Conv2d(out_channel, out_channel, kernel_size=3, stride=stride, padding=1),  # 保持尺寸不变
-            nn.BatchNorm2d(out_channel),
-            nn.ReLU(inplace=True),
-            nn.Conv2d(out_channel, out_channel, kernel_size=1, stride=1),
+            nn.Conv2d(out_channel, out_channel, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(out_channel)
         )
         self.shortcut = nn.Sequential()
