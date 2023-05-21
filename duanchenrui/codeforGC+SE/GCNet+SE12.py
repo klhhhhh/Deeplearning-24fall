@@ -134,9 +134,9 @@ class SE_Block(nn.Module):
     def __init__(self, in_channel):
         super(SE_Block, self).__init__()
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
-        self.conv1 = nn.Conv2d(in_channel, in_channel // 8, kernel_size=1)
+        self.conv1 = nn.Linear(in_channel, in_channel // 8, bias=False)
         self.relu = nn.ReLU()
-        self.conv2 = nn.Conv2d(in_channel // 8, in_channel, kernel_size=1)
+        self.conv2 = nn.Linear(in_channel // 8, in_channel, bias = False)
         self.sigmoid = nn.Sigmoid()
 
     def forward(self, x):
