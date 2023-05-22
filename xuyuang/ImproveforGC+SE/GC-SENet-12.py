@@ -154,19 +154,23 @@ class ResidualBlock(nn.Module):
         super(ResidualBlock, self).__init__()
         self.channel = in_channel
         self.res1 = nn.Sequential(
-            nn.Conv2d(in_channel, out_channel, kernel_size=3, stride=stride, padding=1),  # 保持尺寸不变
+            nn.Conv2d(in_channel, out_channel, kernel_size=1, stride=stride),  # 保持尺寸不变
             nn.BatchNorm2d(out_channel),
+	    nn.ReLU(inplace=True),
+            nn.Conv2d(out_channel, out_channel, kernel_size=3, stride=1, padding=1,bias = false),
+	    nn.BatchNorm2d(out_channel),
             nn.ReLU(inplace=True),
-            nn.Conv2d(out_channel, out_channel, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(out_channel)
+            nn.Conv2d(in_channel, out_channel*4, kernel_size=1, stride=stride),
+	    nn.BatchNorm2d(out_channel*4),
+	   
         )
-        self.SE = SE_Block(out_channel)
+        self.SE = SE_Block(out_channel*4)
         self.shortcut = nn.Sequential()
-        if stride != 1 or in_channel != out_channel:      # Shutcuts用于构建 Conv Block 和 Identity Block
+        if stride != 1 or in_channel != out_channel*4:      # Shutcuts用于构建 Conv Block 和 Identity Block
             self.shortcut = nn.Sequential(
-                nn.Conv2d(in_channel, out_channel,
+                nn.Conv2d(in_channel, out_channel*4,
                           kernel_size=1, stride=stride, bias=False),
-                nn.BatchNorm2d(out_channel)
+                nn.BatchNorm2d(out_channel*4)
             )
 
 
