@@ -210,7 +210,7 @@ class ResNet(nn.Module):
         out = self.bn1(out)
         
         out = self.reslayer1_1(out)
-        out = self.gclayer1(out)
+        #out = self.gclayer1(out)
         out = self.reslayer1_2(out)
         
         out = self.reslayer2_1(out)
@@ -222,7 +222,7 @@ class ResNet(nn.Module):
         out = self.reslayer3_2(out)
         
         out = self.reslayer4_1(out)
-        #out = self.gclayer4(out)
+        out = self.gclayer4(out)
         out = self.reslayer4_2(out)
         
         out = self.pool(out)
