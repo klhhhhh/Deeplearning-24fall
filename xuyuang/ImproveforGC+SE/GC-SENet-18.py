@@ -200,6 +200,7 @@ class ResNet(nn.Module):
         
         self.reslayer4_1 = ResidualBlock(256,512,2) #[256,8,8] -> [512,4,4]
         self.gclayer4 = GlobalContextBlock(512,0.25) # GlobalContextBlock
+        self.fc1_drop = nn.Dropout(0.15)
         self.reslayer4_2 = ResidualBlock(512,512)  #[512,4,4]
         self.pool = nn.AvgPool2d(4) # [512,1,1]
 
@@ -210,19 +211,23 @@ class ResNet(nn.Module):
         out = self.bn1(out)
         
         out = self.reslayer1_1(out)
-        #out = self.gclayer1(out)
+        out = self.gclayer1(out)
+        out = self.fc1_drop(out)
         out = self.reslayer1_2(out)
         
         out = self.reslayer2_1(out)
-        #out = self.gclayer2(out)
+        out = self.gclayer2(out)
+        out = self.fc1_drop(out)
         out = self.reslayer2_2(out)
         
         out = self.reslayer3_1(out)
-        #out = self.gclayer3(out)
+        out = self.gclayer3(out)
+        out = self.fc1_drop(out)
         out = self.reslayer3_2(out)
         
         out = self.reslayer4_1(out)
         out = self.gclayer4(out)
+        out = self.fc1_drop(out)
         out = self.reslayer4_2(out)
         
         out = self.pool(out)

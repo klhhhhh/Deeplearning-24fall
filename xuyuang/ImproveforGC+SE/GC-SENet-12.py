@@ -188,9 +188,11 @@ class ResNet(nn.Module):
         self.GC1 = GlobalContextBlock(8,0.25) # GC block
         self.reslayer1 = ResidualBlock(8,8) # [8,32,32]
         self.reslayer2 = ResidualBlock(8,16,2) # [8,32,32] -> [16,16,16]
+        self.fc1_drop = nn.Dropout(0.15)
         self.GC2 = GlobalContextBlock(16,0.25) # GC block
         self.reslayer3 = ResidualBlock(16,16)  # [16,16,16]
         self.reslayer4 = ResidualBlock(16,32,2) # [16,16,16] -> [32,8,8]
+        self.fc2_drop = nn.Dropout(0.15)
         self.GC3 = GlobalContextBlock(32,0.25) # GC block
         self.reslayer5 = ResidualBlock(32,32) # [32,8,8]
         self.pool = nn.AvgPool2d(2) # [32,8,8]->[32,4,4]
@@ -204,10 +206,12 @@ class ResNet(nn.Module):
         out = self.GC1(out) # nonlocal
         out = self.reslayer1(out)
         out = self.reslayer2(out)
-        #out = self.GC2(out) # nonlocal
+        out = self.fc1_drop(out)
+        out = self.GC2(out) # nonlocal
         out = self.reslayer3(out)
         out = self.reslayer4(out)
-        #out = self.GC3(out) # nonlocal
+        out = self.fc2_drop(out)
+        out = self.GC3(out) # nonlocal
         out = self.reslayer5(out)
         out = self.pool(out)
         out = out.view(out.size(0),-1)
