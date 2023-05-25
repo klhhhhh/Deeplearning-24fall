@@ -203,11 +203,11 @@ class ResNet(nn.Module):
     def forward(self, x):
         out = self.conv1(x)
         out = self.bn1(out)
-        out = self.GC1(out) # nonlocal
+        #out = self.GC1(out) # nonlocal
         out = self.reslayer1(out)
         out = self.reslayer2(out)
         out = self.fc1_drop(out)
-        out = self.GC2(out) # nonlocal
+        #out = self.GC2(out) # nonlocal
         out = self.reslayer3(out)
         out = self.reslayer4(out)
         out = self.fc2_drop(out)
