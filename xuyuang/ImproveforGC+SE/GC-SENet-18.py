@@ -211,18 +211,18 @@ class ResNet(nn.Module):
         out = self.bn1(out)
         
         out = self.reslayer1_1(out)
-        out = self.gclayer1(out)
-        out = self.fc1_drop(out)
+        #out = self.gclayer1(out)
+        #out = self.fc1_drop(out)
         out = self.reslayer1_2(out)
         
         out = self.reslayer2_1(out)
-        out = self.gclayer2(out)
-        out = self.fc1_drop(out)
+        #out = self.gclayer2(out)
+        #out = self.fc1_drop(out)
         out = self.reslayer2_2(out)
         
         out = self.reslayer3_1(out)
-        out = self.gclayer3(out)
-        out = self.fc1_drop(out)
+        #out = self.gclayer3(out)
+        #out = self.fc1_drop(out)
         out = self.reslayer3_2(out)
         
         out = self.reslayer4_1(out)
