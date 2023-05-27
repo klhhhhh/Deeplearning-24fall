@@ -1,6 +1,26 @@
 import torch
 import torch.nn as nn
 
+
+__all__ = ['ImageNetRes2Net', 'res2net50', 'res2net101',
+           'res2net152', 'res2next50_32x4d', 'se_res2net50',
+           'CifarRes2Net', 'res2next29_6cx24wx4scale',
+           'res2next29_8cx25wx4scale', 'res2next29_6cx24wx6scale',
+           'res2next29_6cx24wx4scale_se', 'res2next29_8cx25wx4scale_se',
+           'res2next29_6cx24wx6scale_se']
+
+
+def conv3x3(in_planes, out_planes, stride=1, groups=1):
+    """3x3 convolution with padding"""
+    return nn.Conv2d(in_planes, out_planes, kernel_size=3, stride=stride,
+                     padding=1, groups=groups, bias=False)
+
+
+def conv1x1(in_planes, out_planes, stride=1):
+    """1x1 convolution"""
+    return nn.Conv2d(in_planes, out_planes, kernel_size=1, stride=stride, bias=False)
+
+
 class SEModule(nn.Module):
     def __init__(self, channels, reduction=16):
         super(SEModule, self).__init__()
@@ -72,6 +92,7 @@ class Res2NetBottleneck(nn.Module):
         out = self.relu(out)
 
         return out
+
 
 class ImageNetRes2Net(nn.Module):
     def __init__(self, layers, num_classes=1000, zero_init_residual=False,
@@ -210,3 +231,85 @@ class CifarRes2Net(nn.Module):
 
         return features, x
 
+
+def res2net50(**kwargs):
+    """Constructs a Res2Net-50 model.
+    """
+    model = ImageNetRes2Net([3, 4, 6, 3], **kwargs)
+    return model
+
+
+def res2net101(**kwargs):
+    """Constructs a ResNet-101 model.
+    """
+    model = ImageNetRes2Net([3, 4, 23, 3], **kwargs)
+    return model
+
+
+def res2net152(**kwargs):
+    """Constructs a ResNet-152 model.
+    """
+    model = ImageNetRes2Net([3, 8, 36, 3], **kwargs)
+    return model
+
+
+def res2next50_32x4d(**kwargs):
+    """Constructs a Res2NeXt-50_32x4d model.
+    """
+    model = ImageNetRes2Net([3, 4, 6, 3], groups=32, width=4, **kwargs)
+    return model
+
+
+def res2next101_32x8d(**kwargs):
+    """Constructs a Res2NeXt-101_32x8d model.
+    """
+    model = ImageNetRes2Net([3, 4, 23, 3], groups=32, width=8, **kwargs)
+    return model
+
+
+def se_res2net50(**kwargs):
+    """Constructs a SE-Res2Net-50 model.
+    """
+    model = ImageNetRes2Net([3, 4, 6, 3], se=True, **kwargs)
+    return model
+
+
+def res2next29_6cx24wx4scale(**kwargs):
+    """Constructs a Res2NeXt-29, 6cx24wx4scale model.
+    """
+    model = CifarRes2Net([3, 3, 3], groups=6, width=24, scales=4, **kwargs)
+    return model
+
+
+def res2next29_8cx25wx4scale(**kwargs):
+    """Constructs a Res2NeXt-29, 8cx25wx4scale model.
+    """
+    model = CifarRes2Net([3, 3, 3], groups=8, width=25, scales=4, **kwargs)
+    return model
+
+
+def res2next29_6cx24wx6scale(**kwargs):
+    """Constructs a Res2NeXt-29, 6cx24wx6scale model.
+    """
+    model = CifarRes2Net([3, 3, 3], groups=6, width=24, scales=6, **kwargs)
+    return model
+
+def res2next29_6cx24wx4scale_se(**kwargs):
+    """Constructs a Res2NeXt-29, 6cx24wx4scale-SE model.
+    """
+    model = CifarRes2Net([3, 3, 3], groups=6, width=24, scales=4, se=True, **kwargs)
+    return model
+
+
+def res2next29_8cx25wx4scale_se(**kwargs):
+    """Constructs a Res2NeXt-29, 8cx25wx4scale-SE model.
+    """
+    model = CifarRes2Net([3, 3, 3], groups=8, width=25, scales=4, se=True, **kwargs)
+    return model
+
+
+def res2next29_6cx24wx6scale_se(**kwargs):
+    """Constructs a Res2NeXt-29, 6cx24wx6scale-SE model.
+    """
+    model = CifarRes2Net([3, 3, 3], groups=6, width=24, scales=6, se=True, **kwargs)
+    return model
